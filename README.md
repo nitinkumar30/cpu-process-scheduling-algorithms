@@ -11,7 +11,7 @@ Implementation of CPU process scheduling algorithms such as First Come First Ser
 
 # Language used
 
-> I've implemented in Python 🐍 but you may contribute in other language. For more details on how to contribute, please refer [here](https://github.com/avinash201199/Hacktoberfest-Guide/tree/main/How%20to%20begin%20with%20hacktober%20fest%202021).
+> I've implemented in Python 🐍 but you may contribute in other language. For more details on how to contribute, please refer [here](https://github.com/avinash201199/Hacktoberfest-Guide/blob/main/How%20to%20begin%20with%20hacktober%20fest%202021/README.MD#how-to-raise-an-issue-before-raising-pr).
 
 # How to run
 
