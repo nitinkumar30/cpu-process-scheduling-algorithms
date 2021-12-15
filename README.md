@@ -4,10 +4,10 @@ Implementation of CPU process scheduling algorithms such as First Come First Ser
 # Algorithms covered
 
 > Following algorithms are covered 👇:
-> 1. [First Come First Serve](https://github.com/nitinkumar30/cpu-process-scheduling-algorithms/blob/main/first_come_first_serve.py)
-> 2. [Shortest Job first Scheduling]()
-> 3. [Priority Scheduling]()
-> 4. [Round Robin Scheduling]()
+> 1. [First Come First Serve](https://github.com/nitinkumar30/cpu-process-scheduling-algorithms/blob/main/first_come_first_serve.py) ✅
+> 2. [Shortest Job first Scheduling]() 🚮
+> 3. [Priority Scheduling]() 🚮
+> 4. [Round Robin Scheduling]() 🚮
 
 # Language used
 
