@@ -1,61 +1,79 @@
-from __future__ import annotations
-
-from statistics import mean
-
-
-def calculate_waiting_times(burst_times: list[int]) -> list[int]:
-    """
-    Calculate the waiting times of a list of processes that have a specified duration.
-
-    Return: The waiting time for each process.
-    >>> calculate_waiting_times([10, 5, 8])
-    [13, 10, 13]
-    >>> calculate_waiting_times([4, 6, 3, 1])
-    [5, 8, 9, 6]
-    >>> calculate_waiting_times([12, 2, 10])
-    [12, 2, 12]
-    """
-    quantum = 2
-    rem_burst_times = list(burst_times)
-    waiting_times = [0] * len(burst_times)
-    t = 0
+def rrobin(dict, quantum):
+    begHold = 0
+    rrdict, pLine = {}, []
+    keyP = list(dict.keys())
+    at, bt = map(list, zip(*dict.values()))
+    atHold, btHold = at.copy(), bt.copy()
     while True:
-        done = True
-        for i, burst_time in enumerate(burst_times):
-            if rem_burst_times[i] > 0:
-                done = False
-                if rem_burst_times[i] > quantum:
-                    t += quantum
-                    rem_burst_times[i] -= quantum
-                else:
-                    t += rem_burst_times[i]
-                    waiting_times[i] = t - burst_time
-                    rem_burst_times[i] = 0
-        if done is True:
-            return waiting_times
+        flag = True
+        for i in range(len(keyP)):
+            if atHold[i] <= begHold:
+                if atHold[i] <= quantum:
+                    if btHold[i] > 0:
+                        flag = False
+                        if btHold[i] > quantum:
+                            begHold += quantum
+                            btHold[i] -= quantum
+                            atHold[i] += quantum
+                            pLine.append([keyP[i], begHold])
+                        else:
+                            begHold += btHold[i]
+                            rrdict[keyP[i]] = [begHold - bt[i] - at[i], begHold - at[i]]
+                            btHold[i] = 0
+                            pLine.append([keyP[i], begHold])
+                elif atHold[i] > quantum:
+                    for j in range(len(keyP)):
+                        if (atHold[j] < atHold[i]):
+                            if (btHold[j] > 0):
+                                flag = False
+                                if (btHold[j] > quantum):
+                                    begHold += quantum
+                                    btHold[j] -= quantum
+                                    atHold[j] += quantum
+                                    pLine.append([keyP[j], begHold])
+                                else:
+                                    begHold += btHold[j]
+                                    rrdict[keyP[j]] = [begHold - bt[j] - at[j], begHold - at[j]]
+                                    btHold[j] = 0
+                                    pLine.append([keyP[j], begHold])
+                    if (btHold[i] > 0):
+                        flag = False
+                        if (btHold[i] > quantum):
+                            begHold += quantum
+                            btHold[i] -= quantum
+                            atHold[i] += quantum
+                            pLine.append([keyP[i], begHold])
+                        else:
+                            begHold += btHold[i]
+                            rrdict[keyP[i]] = [begHold - bt[i] - at[i], begHold - at[i]]
+                            btHold[i] = 0
+                            pLine.append([keyP[i], begHold])
+            elif (atHold[i] > begHold):
+                begHold += 1
+                i -= 1
+        if (flag):
+            break
+    return rrdict, pLine
+
+def printData(gData, cData, pLine, Name):
+    avgWT, avgTT = 0, 0
+    plinestr = "0 -> "
+    print(Name.upper())
+    print('| Process | ArrivalTime | BurstTime | Waiting Time | TurnAround Time |')
+    for key, value in sorted(cData.items()):
+        print('{:>6}{:>11}{:>14}{:>16}{:>17}'.format(key, gData[key][0], gData[key][1], value[0], value[1]))
+        avgWT += value[0]
+        avgTT += value[1]
+    print('\nAverage Wait Time = {}    \nAverage Turnaround Time = {}\n'.format(avgWT / len(cData), avgTT / len(cData)))
+    for x in pLine:
+        plinestr += ('{} -> {} -> '.format(x[0], x[1]))
+    print('{}\n'.format(plinestr[:-3]))
 
 
-def calculate_turn_around_times(
-    burst_times: list[int], waiting_times: list[int]
-) -> list[int]:
-    """
-    >>> calculate_turn_around_times([1, 2, 3, 4], [0, 1, 3])
-    [1, 3, 6]
-    >>> calculate_turn_around_times([10, 3, 7], [10, 6, 11])
-    [20, 9, 18]
-    """
-    return [burst + waiting for burst, waiting in zip(burst_times, waiting_times)]
+gData = {'P1': [0, 10], 'P2': [1, 2], 'P3': [4, 4], 'P4': [5, 1], 'P5': [10, 3], 'P6': [21, 12]}
+gQuant = 4
+gContSwitch = 0.4
 
+rrobinScheduling, rrLine = rrobin(gData, gQuant)
 
-if __name__ == "__main__":
-    burst_times = [3, 5, 7]
-    waiting_times = calculate_waiting_times(burst_times)
-    turn_around_times = calculate_turn_around_times(burst_times, waiting_times)
-    print("Process ID \tBurst Time \tWaiting Time \tTurnaround Time")
-    for i, burst_time in enumerate(burst_times):
-        print(
-            f"  {i + 1}\t\t  {burst_time}\t\t  {waiting_times[i]}\t\t  "
-            f"{turn_around_times[i]}"
-        )
-    print(f"\nAverage waiting time = {mean(waiting_times):.5f}")
-    print(f"Average turn around time = {mean(turn_around_times):.5f}")
+printData(gData, rrobinScheduling, rrLine, 'Round Robin QT={}'.format(gQuant))
