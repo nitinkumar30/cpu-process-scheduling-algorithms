@@ -17,7 +17,9 @@
 ![srtf](https://user-images.githubusercontent.com/40369168/152391779-773a457f-5ee2-4918-a753-6f616b63c3c6.gif)
 
 
+---
 
+**More clear videos and demo [here](https://github.com/nitinkumar30/cpu-process-scheduling-algorithms/tree/main/Python/CPU%20scheduling%20algo).**
 
-
+__Author__ : __[Nitin Kumar](https://linkedin.com/in/nitin30kumar/)__
 
